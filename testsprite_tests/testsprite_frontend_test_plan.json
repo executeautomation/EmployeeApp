@@ -1,0 +1,392 @@
+[
+  {
+    "id": "TC001",
+    "title": "User login with valid credentials",
+    "description": "Verify that a user can successfully log in with correct username and password and is redirected to the employee list page.",
+    "category": "functional",
+    "priority": "High",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to login page"
+      },
+      {
+        "type": "action",
+        "description": "Input valid username and password"
+      },
+      {
+        "type": "action",
+        "description": "Click login button"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify that login is successful and user is redirected to the employee list page"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify a session token is stored in localStorage"
+      }
+    ]
+  },
+  {
+    "id": "TC002",
+    "title": "User login with invalid credentials",
+    "description": "Verify that login fails with incorrect username or password and appropriate error message is displayed.",
+    "category": "error handling",
+    "priority": "High",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to login page"
+      },
+      {
+        "type": "action",
+        "description": "Input invalid username or password"
+      },
+      {
+        "type": "action",
+        "description": "Click login button"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify that login is unsuccessful"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify appropriate error message is displayed indicating invalid credentials"
+      }
+    ]
+  },
+  {
+    "id": "TC003",
+    "title": "Access restriction to employee list without authentication",
+    "description": "Verify that unauthenticated users cannot access employee management routes and are redirected to login page.",
+    "category": "security",
+    "priority": "High",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Attempt to navigate directly to employee list page URL without logging in"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify redirection to login page"
+      }
+    ]
+  },
+  {
+    "id": "TC004",
+    "title": "Add new employee with valid data",
+    "description": "Verify that user can add a new employee successfully using the employee form with valid inputs.",
+    "category": "functional",
+    "priority": "High",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Login with valid credentials"
+      },
+      {
+        "type": "action",
+        "description": "Navigate to employee list page"
+      },
+      {
+        "type": "action",
+        "description": "Click button to open add employee form"
+      },
+      {
+        "type": "action",
+        "description": "Provide valid employee name, email, and position"
+      },
+      {
+        "type": "action",
+        "description": "Submit the employee form"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify new employee appears in the employee list with correct details"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify backend API returned success response for employee creation"
+      }
+    ]
+  },
+  {
+    "id": "TC005",
+    "title": "Add new employee with invalid input data",
+    "description": "Verify that validation errors are shown when user inputs invalid or incomplete data in employee form.",
+    "category": "error handling",
+    "priority": "Medium",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Login with valid credentials"
+      },
+      {
+        "type": "action",
+        "description": "Navigate to employee list page"
+      },
+      {
+        "type": "action",
+        "description": "Click button to open add employee form"
+      },
+      {
+        "type": "action",
+        "description": "Submit form with empty or invalid fields (empty name, invalid email format, etc.)"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify form validation errors are displayed and submission is blocked"
+      }
+    ]
+  },
+  {
+    "id": "TC006",
+    "title": "Edit existing employee details",
+    "description": "Verify that user can edit an existing employee's information and changes are saved correctly.",
+    "category": "functional",
+    "priority": "High",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Login with valid credentials"
+      },
+      {
+        "type": "action",
+        "description": "Navigate to employee list page"
+      },
+      {
+        "type": "action",
+        "description": "Select an employee record and open edit form"
+      },
+      {
+        "type": "action",
+        "description": "Update fields such as name, email or position with valid data"
+      },
+      {
+        "type": "action",
+        "description": "Submit the edit form"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify the employee list updates to reflect changes"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify backend API returned success response for employee update"
+      }
+    ]
+  },
+  {
+    "id": "TC007",
+    "title": "Delete an employee record",
+    "description": "Verify that user can delete an employee record and it is removed from the employee list.",
+    "category": "functional",
+    "priority": "High",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Login with valid credentials"
+      },
+      {
+        "type": "action",
+        "description": "Navigate to employee list page"
+      },
+      {
+        "type": "action",
+        "description": "Select an employee record and initiate delete action"
+      },
+      {
+        "type": "action",
+        "description": "Confirm the deletion in dialog prompt"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify employee record is removed from the list"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify backend API returned success response for employee deletion"
+      }
+    ]
+  },
+  {
+    "id": "TC008",
+    "title": "Real-time search and filtering in employee list",
+    "description": "Verify that search input filters employee list dynamically and results are accurate for partial and full matches.",
+    "category": "functional",
+    "priority": "High",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Login and navigate to employee list page"
+      },
+      {
+        "type": "action",
+        "description": "Enter partial text in search input (e.g. partial name or position)"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify displayed employee list is filtered to matching records in real-time"
+      },
+      {
+        "type": "action",
+        "description": "Clear search input"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify full employee list is restored"
+      }
+    ]
+  },
+  {
+    "id": "TC009",
+    "title": "Theme toggle between light and dark modes",
+    "description": "Verify that user can toggle the application theme and UI components update styles consistently.",
+    "category": "functional",
+    "priority": "Medium",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Login and navigate to any main page (employee list)"
+      },
+      {
+        "type": "action",
+        "description": "Click the theme toggle button in the navigation menu"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify UI theme switches from light to dark mode"
+      },
+      {
+        "type": "action",
+        "description": "Toggle theme back to light mode"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify UI theme reverts to light mode with consistent styling"
+      }
+    ]
+  },
+  {
+    "id": "TC010",
+    "title": "Logout clears session and redirects to login",
+    "description": "Verify that the user can logout successfully which clears the session and redirects to login page.",
+    "category": "functional",
+    "priority": "High",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Login with valid credentials"
+      },
+      {
+        "type": "action",
+        "description": "Click logout button in the navigation menu"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify session data in localStorage is cleared"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify redirection to the login page"
+      },
+      {
+        "type": "action",
+        "description": "Attempt to access employee list page after logout"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify access is denied and redirected back to login"
+      }
+    ]
+  },
+  {
+    "id": "TC011",
+    "title": "API error handling for backend failures",
+    "description": "Verify user-visible error handling when backend API requests (login, CRUD operations) fail or return errors.",
+    "category": "error handling",
+    "priority": "High",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Simulate backend API failure or return error status for login or employee CRUD endpoints"
+      },
+      {
+        "type": "action",
+        "description": "Perform login, add, edit, or delete employee action"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify the frontend displays an appropriate error notification or message explaining the failure"
+      }
+    ]
+  },
+  {
+    "id": "TC012",
+    "title": "Responsive UI layout validation",
+    "description": "Verify the application UI components (tables, forms, dialogs) render appropriately on various screen sizes including mobile, tablet, and desktop.",
+    "category": "ui",
+    "priority": "Medium",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Open the application in different devices or emulated screen sizes"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify that employee list table, forms, dialogs, and navigation menu are usable and visually consistent"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify that UI elements do not overflow or overlap"
+      }
+    ]
+  },
+  {
+    "id": "TC013",
+    "title": "Protected route enforcement with client-side routing",
+    "description": "Verify that client-side routing correctly enforces authentication guards on protected pages like employee list and forms.",
+    "category": "security",
+    "priority": "High",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Attempt to navigate to protected route (employee list) manually in the browser without authentication"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify redirection to login page"
+      },
+      {
+        "type": "action",
+        "description": "Login successfully and navigate to employee list"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify access to the protected page is granted"
+      }
+    ]
+  },
+  {
+    "id": "TC014",
+    "title": "View detailed employee information",
+    "description": "Verify that user can view detailed information of a selected employee in a dialog or separate page.",
+    "category": "functional",
+    "priority": "Medium",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Login and navigate to employee list page"
+      },
+      {
+        "type": "action",
+        "description": "Select an employee from the list and open detailed view modal or page"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify all employee details (name, email, position) are displayed correctly"
+      }
+    ]
+  }
+]

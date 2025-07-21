@@ -1,0 +1,55 @@
+{
+  "tech_stack": ["JavaScript", "React", "Node.js", "Express", "SQLite", "Material-UI", "Vite", "React Router", "Axios"],
+  "features": [
+    {
+      "name": "Authentication System",
+      "description": "User login system with localStorage-based session management and protected routes",
+      "files": ["frontend/src/components/Login.jsx", "frontend/src/App.jsx", "backend/server.js"]
+    },
+    {
+      "name": "Employee Management Form",
+      "description": "Form component for adding and editing employee information (name, email, position)",
+      "files": ["frontend/src/components/EmployeeForm.jsx"]
+    },
+    {
+      "name": "Employee List Management",
+      "description": "Table view for displaying employees with search, view, edit, and delete functionality",
+      "files": ["frontend/src/components/EmployeeList.jsx"]
+    },
+    {
+      "name": "Navigation Menu",
+      "description": "Top navigation bar with login/logout, theme toggle, and navigation links",
+      "files": ["frontend/src/components/MenuBar.jsx"]
+    },
+    {
+      "name": "Theme Management",
+      "description": "Light/dark theme toggle functionality using Material-UI theme provider",
+      "files": ["frontend/src/App.jsx", "frontend/src/components/MenuBar.jsx"]
+    },
+    {
+      "name": "Routing System",
+      "description": "Client-side routing with protected routes for authenticated users",
+      "files": ["frontend/src/App.jsx"]
+    },
+    {
+      "name": "API Integration",
+      "description": "HTTP client integration for backend communication using Axios",
+      "files": ["frontend/src/components/Login.jsx", "frontend/src/components/EmployeeForm.jsx", "frontend/src/components/EmployeeList.jsx"]
+    },
+    {
+      "name": "Backend REST API",
+      "description": "Express.js server with SQLite database for employee CRUD operations and authentication",
+      "files": ["backend/server.js", "backend/package.json"]
+    },
+    {
+      "name": "Database Management",
+      "description": "SQLite database for storing employee records",
+      "files": ["backend/db.sqlite", "backend/server.js"]
+    },
+    {
+      "name": "UI Components",
+      "description": "Material-UI based responsive interface components including cards, tables, forms, and dialogs",
+      "files": ["frontend/src/components/EmployeeForm.jsx", "frontend/src/components/EmployeeList.jsx", "frontend/src/components/Login.jsx", "frontend/src/components/MenuBar.jsx"]
+    }
+  ]
+}
