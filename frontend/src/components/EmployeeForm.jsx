@@ -125,7 +125,7 @@ const EmployeeForm = ({ onSuccess, initialValues, onEdit }) => {
 
   // Standalone page
   return (
-    <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', minHeight: '70vh' }}>
+    <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', minHeight: '50vh' }}>
       <Card sx={{ minWidth: 350, maxWidth: 400, p: 2, boxShadow: 3 }}>
         <CardContent>
           <Typography variant="h5" color="primary" align="center" fontWeight="bold" mb={3}>
