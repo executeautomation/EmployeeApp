@@ -1,11 +1,12 @@
-import React, { useState, useMemo } from 'react';
+import React, { useState } from 'react';
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import Login from './components/Login';
 import EmployeeForm from './components/EmployeeForm';
 import EmployeeList from './components/EmployeeList';
 import MenuBar from './components/MenuBar';
-import { ThemeProvider, createTheme } from '@mui/material/styles';
+import { ThemeProvider } from '@mui/material/styles';
 import CssBaseline from '@mui/material/CssBaseline';
+import { themes } from './themes';
 
 const PrivateRoute = ({ children }) => {
   const loggedIn = localStorage.getItem('loggedIn') === 'true';
@@ -13,15 +14,17 @@ const PrivateRoute = ({ children }) => {
 };
 
 function App() {
-  const [mode, setMode] = useState('light');
-  const theme = useMemo(() => createTheme({ palette: { mode } }), [mode]);
-  const toggleTheme = () => setMode((prev) => (prev === 'light' ? 'dark' : 'light'));
+  const [currentTheme, setCurrentTheme] = useState('light');
+  
+  const handleThemeChange = (themeName) => {
+    setCurrentTheme(themeName);
+  };
 
   return (
-    <ThemeProvider theme={theme}>
+    <ThemeProvider theme={themes[currentTheme]}>
       <CssBaseline />
       <Router>
-        <MenuBar onToggleTheme={toggleTheme} mode={mode} />
+        <MenuBar onThemeChange={handleThemeChange} currentTheme={currentTheme} />
         <main style={{ 
           flex: 1, 
           display: 'flex', 

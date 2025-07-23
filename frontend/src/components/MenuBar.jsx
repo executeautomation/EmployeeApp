@@ -5,11 +5,14 @@ import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
 import Button from '@mui/material/Button';
 import Box from '@mui/material/Box';
-import IconButton from '@mui/material/IconButton';
-import Brightness4Icon from '@mui/icons-material/Brightness4';
-import Brightness7Icon from '@mui/icons-material/Brightness7';
+import FormControl from '@mui/material/FormControl';
+import Select from '@mui/material/Select';
+import MenuItem from '@mui/material/MenuItem';
+import InputLabel from '@mui/material/InputLabel';
+import PaletteIcon from '@mui/icons-material/Palette';
+import { themeNames, themeKeys } from '../themes';
 
-const MenuBar = ({ onToggleTheme, mode }) => {
+const MenuBar = ({ onThemeChange, currentTheme }) => {
   const navigate = useNavigate();
   const loggedIn = localStorage.getItem('loggedIn') === 'true';
 
@@ -18,13 +21,17 @@ const MenuBar = ({ onToggleTheme, mode }) => {
     navigate('/login');
   };
 
+  const handleThemeChange = (event) => {
+    onThemeChange(event.target.value);
+  };
+
   return (
     <AppBar position="static" color="primary" sx={{ mb: 4 }}>
       <Toolbar>
         <Typography variant="h6" component="div" sx={{ flexGrow: 1, fontWeight: 'bold' }}>
           Employee Manager
         </Typography>
-        <Box>
+        <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
           {loggedIn ? (
             <>
               <Button color="inherit" component={Link} to="/form">Add Employee</Button>
@@ -34,9 +41,47 @@ const MenuBar = ({ onToggleTheme, mode }) => {
           ) : (
             <Button color="inherit" component={Link} to="/login">Login</Button>
           )}
-          <IconButton sx={{ ml: 2 }} color="inherit" onClick={onToggleTheme}>
-            {mode === 'dark' ? <Brightness7Icon /> : <Brightness4Icon />}
-          </IconButton>
+          <FormControl size="small" sx={{ minWidth: 120 }}>
+            <InputLabel 
+              id="theme-select-label" 
+              sx={{ 
+                color: 'inherit',
+                '&.Mui-focused': { color: 'inherit' }
+              }}
+            >
+              <Box sx={{ display: 'flex', alignItems: 'center', gap: 0.5 }}>
+                <PaletteIcon fontSize="small" />
+                Theme
+              </Box>
+            </InputLabel>
+            <Select
+              labelId="theme-select-label"
+              value={currentTheme}
+              onChange={handleThemeChange}
+              label="Theme"
+              sx={{
+                color: 'inherit',
+                '& .MuiOutlinedInput-notchedOutline': {
+                  borderColor: 'rgba(255, 255, 255, 0.23)',
+                },
+                '&:hover .MuiOutlinedInput-notchedOutline': {
+                  borderColor: 'rgba(255, 255, 255, 0.5)',
+                },
+                '&.Mui-focused .MuiOutlinedInput-notchedOutline': {
+                  borderColor: 'rgba(255, 255, 255, 0.87)',
+                },
+                '& .MuiSvgIcon-root': {
+                  color: 'inherit',
+                },
+              }}
+            >
+              {themeKeys.map((themeKey) => (
+                <MenuItem key={themeKey} value={themeKey}>
+                  {themeNames[themeKey]}
+                </MenuItem>
+              ))}
+            </Select>
+          </FormControl>
         </Box>
       </Toolbar>
     </AppBar>
