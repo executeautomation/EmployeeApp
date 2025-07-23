@@ -28,13 +28,13 @@ const EmployeeForm = ({ onSuccess, initialValues, onEdit }) => {
 
     try {
       if (isEdit) {
-        const response = await axios.put(`http://localhost:4000/employees/${initialValues.id}`, { name, email, position });
+        await axios.put(`http://localhost:4000/employees/${initialValues.id}`, { name, email, position });
         setSuccess('Employee updated successfully!');
         if (onEdit) {
           setTimeout(() => onEdit(), 1500);
         }
       } else {
-        const response = await axios.post('http://localhost:4000/employees', { name, email, position });
+        await axios.post('http://localhost:4000/employees', { name, email, position });
         setSuccess('Employee added successfully!');
         setName(''); setEmail(''); setPosition('');
         
