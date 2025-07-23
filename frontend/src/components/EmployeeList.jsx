@@ -108,8 +108,8 @@ const EmployeeList = () => {
   );
 
   return (
-    <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'flex-start', minHeight: '70vh', px: 1 }}>
-      <Card sx={{ width: '100%', maxWidth: 900, mt: 4, boxShadow: 3 }}>
+    <Box sx={{ width: '100%' }}>
+      <Card sx={{ width: '100%', boxShadow: 3 }}>
         <CardContent>
           <Grid container spacing={2} alignItems="center" justifyContent="space-between" sx={{ mb: 2 }}>
             <Grid size={{ xs: 12, sm: 6 }}>
