@@ -1,0 +1,12 @@
+ {
+ "mcpServers": {
+    "sqlite": {
+      "command": "npx",
+      "args": [
+        "-y",
+        "@executeautomation/database-server",
+        "${workspaceFolder}/backend/db.sqlite"
+      ]
+    }
+}
+}
