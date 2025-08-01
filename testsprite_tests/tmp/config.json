@@ -1,5 +1,5 @@
 {
-  "status": "commited",
+  "status": "init",
   "type": "frontend",
   "scope": "codebase",
   "localEndpoint": "http://localhost:5173",
@@ -14,5 +14,6 @@
       "API_KEY": "sk-user-KKc0nFMu9kBDR-6EEogOg6hj9-koTDrinpRipaZWfJR_t8D_7RE7xInTzK3beT70G20v7p1uTjDu0SwKD2W2d0mciTK_uD-Qvz5ZQ9X7zLGPwDH4ufFnEq1OjUlFUELmvmI"
     }
   },
-  "proxy": "http://76eaafec-3e77-4eb9-91f1-7728cfc3361d:3Rr827wf61wgbIQ98s7etlV1JazobGiz@tun.testsprite.com:8080"
+  "proxy": "http://76eaafec-3e77-4eb9-91f1-7728cfc3361d:3Rr827wf61wgbIQ98s7etlV1JazobGiz@tun.testsprite.com:8080",
+  "serverPort": 33387
 }
