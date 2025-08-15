@@ -6,16 +6,28 @@ import CardContent from '@mui/material/CardContent';
 import Typography from '@mui/material/Typography';
 import TextField from '@mui/material/TextField';
 import Button from '@mui/material/Button';
+import Box from '@mui/material/Box';
+import Avatar from '@mui/material/Avatar';
+import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
+import Visibility from '@mui/icons-material/Visibility';
+import VisibilityOff from '@mui/icons-material/VisibilityOff';
+import IconButton from '@mui/material/IconButton';
+import InputAdornment from '@mui/material/InputAdornment';
+import Alert from '@mui/material/Alert';
+import CircularProgress from '@mui/material/CircularProgress';
 
 const Login = () => {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
+  const [showPassword, setShowPassword] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
   const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError(''); // Clear any previous errors
+    setIsLoading(true);
     
     try {
       const response = await axios.post('http://localhost:4000/login', { username, password });
@@ -40,16 +52,50 @@ const Login = () => {
         // Other error
         setError('Login failed. Please try again.');
       }
+    } finally {
+      setIsLoading(false);
     }
   };
 
+  const handleClickShowPassword = () => {
+    setShowPassword(!showPassword);
+  };
+
   return (
-    <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', minHeight: '50vh' }}>
-      <Card sx={{ minWidth: 350, maxWidth: 400, p: 2, boxShadow: 3 }}>
+    <Box 
+      sx={{ 
+        display: 'flex', 
+        justifyContent: 'center', 
+        alignItems: 'center', 
+        minHeight: '100vh',
+        background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+        padding: 2
+      }}
+    >
+      <Card 
+        sx={{ 
+          minWidth: 350, 
+          maxWidth: 450, 
+          p: 3, 
+          boxShadow: '0 8px 32px rgba(0,0,0,0.1)',
+          borderRadius: 3,
+          background: 'rgba(255, 255, 255, 0.95)',
+          backdropFilter: 'blur(10px)'
+        }}
+      >
         <CardContent>
-          <Typography variant="h5" color="primary" align="center" fontWeight="bold" mb={3}>
-            Login
-          </Typography>
+          <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', mb: 3 }}>
+            <Avatar sx={{ m: 1, bgcolor: 'primary.main', width: 56, height: 56 }}>
+              <LockOutlinedIcon sx={{ fontSize: 30 }} />
+            </Avatar>
+            <Typography variant="h4" color="primary" align="center" fontWeight="bold">
+              Welcome Back
+            </Typography>
+            <Typography variant="body2" color="text.secondary" align="center" sx={{ mt: 1 }}>
+              Sign in to your account
+            </Typography>
+          </Box>
+          
           <form onSubmit={handleSubmit}>
             <TextField
               label="Username"
@@ -58,24 +104,89 @@ const Login = () => {
               fullWidth
               margin="normal"
               required
+              variant="outlined"
+              disabled={isLoading}
+              sx={{
+                '& .MuiOutlinedInput-root': {
+                  borderRadius: 2,
+                }
+              }}
             />
             <TextField
               label="Password"
-              type="password"
+              type={showPassword ? 'text' : 'password'}
               value={password}
               onChange={e => setPassword(e.target.value)}
               fullWidth
               margin="normal"
               required
+              variant="outlined"
+              disabled={isLoading}
+              InputProps={{
+                endAdornment: (
+                  <InputAdornment position="end">
+                    <IconButton
+                      aria-label="toggle password visibility"
+                      onClick={handleClickShowPassword}
+                      edge="end"
+                      disabled={isLoading}
+                      data-testid="password-visibility-toggle"
+                    >
+                      {showPassword ? <VisibilityOff /> : <Visibility />}
+                    </IconButton>
+                  </InputAdornment>
+                ),
+              }}
+              sx={{
+                '& .MuiOutlinedInput-root': {
+                  borderRadius: 2,
+                }
+              }}
             />
-            {error && <Typography color="error" mb={1}>{error}</Typography>}
-            <Button type="submit" variant="contained" color="primary" fullWidth sx={{ mt: 2, fontWeight: 'bold' }}>
-              Login
+            
+            {error && (
+              <Alert 
+                severity="error" 
+                sx={{ mt: 2, borderRadius: 2 }}
+                data-testid="error-alert"
+              >
+                {error}
+              </Alert>
+            )}
+            
+            <Button 
+              type="submit" 
+              variant="contained" 
+              color="primary" 
+              fullWidth 
+              disabled={isLoading}
+              sx={{ 
+                mt: 3, 
+                mb: 2, 
+                fontWeight: 'bold',
+                fontSize: '1.1rem',
+                borderRadius: 2,
+                py: 1.5,
+                background: 'linear-gradient(45deg, #2196F3 30%, #21CBF3 90%)',
+                '&:hover': {
+                  background: 'linear-gradient(45deg, #1976D2 30%, #1BA5D2 90%)',
+                }
+              }}
+              data-testid="login-button"
+            >
+              {isLoading ? (
+                <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+                  <CircularProgress size={20} color="inherit" />
+                  Signing In...
+                </Box>
+              ) : (
+                'Sign In'
+              )}
             </Button>
           </form>
         </CardContent>
       </Card>
-    </div>
+    </Box>
   );
 };
 

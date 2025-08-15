@@ -1,28 +1,49 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import AppBar from '@mui/material/AppBar';
 import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
 import Button from '@mui/material/Button';
 import Box from '@mui/material/Box';
-import FormControl from '@mui/material/FormControl';
-import Select from '@mui/material/Select';
+import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
-import InputLabel from '@mui/material/InputLabel';
 import PaletteIcon from '@mui/icons-material/Palette';
+import PeopleIcon from '@mui/icons-material/People';
+import PersonAddIcon from '@mui/icons-material/PersonAdd';
+import ListIcon from '@mui/icons-material/List';
+import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import { themeNames, themeKeys } from '../themes';
 
 const MenuBar = ({ onThemeChange, currentTheme }) => {
   const navigate = useNavigate();
   const loggedIn = localStorage.getItem('loggedIn') === 'true';
+  const [employeeMenuAnchor, setEmployeeMenuAnchor] = useState(null);
+  const [themeMenuAnchor, setThemeMenuAnchor] = useState(null);
 
   const handleLogoff = () => {
     localStorage.removeItem('loggedIn');
     navigate('/login');
   };
 
-  const handleThemeChange = (event) => {
-    onThemeChange(event.target.value);
+  const handleEmployeeMenuOpen = (event) => {
+    setEmployeeMenuAnchor(event.currentTarget);
+  };
+
+  const handleEmployeeMenuClose = () => {
+    setEmployeeMenuAnchor(null);
+  };
+
+  const handleThemeMenuOpen = (event) => {
+    setThemeMenuAnchor(event.currentTarget);
+  };
+
+  const handleThemeMenuClose = () => {
+    setThemeMenuAnchor(null);
+  };
+
+  const handleThemeChange = (themeKey) => {
+    onThemeChange(themeKey);
+    handleThemeMenuClose();
   };
 
   return (
@@ -34,54 +55,105 @@ const MenuBar = ({ onThemeChange, currentTheme }) => {
         <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
           {loggedIn ? (
             <>
-              <Button color="inherit" component={Link} to="/form">Add Employee</Button>
-              <Button color="inherit" component={Link} to="/list">Employee List</Button>
+              <Button 
+                color="inherit" 
+                onClick={handleEmployeeMenuOpen}
+                onMouseEnter={handleEmployeeMenuOpen}
+                data-testid="employee-menu-button"
+                sx={{ 
+                  '&:hover': { 
+                    backgroundColor: 'rgba(255, 255, 255, 0.1)' 
+                  } 
+                }}
+                startIcon={<PeopleIcon />}
+                endIcon={<ExpandMoreIcon />}
+              >
+                Employees
+              </Button>
+              <Menu
+                anchorEl={employeeMenuAnchor}
+                open={Boolean(employeeMenuAnchor)}
+                onClose={handleEmployeeMenuClose}
+                MenuListProps={{
+                  onMouseLeave: handleEmployeeMenuClose,
+                }}
+                data-testid="employee-menu"
+                sx={{
+                  '& .MuiPaper-root': {
+                    mt: 1.5,
+                  }
+                }}
+              >
+                <MenuItem 
+                  component={Link} 
+                  to="/form" 
+                  onClick={handleEmployeeMenuClose}
+                  data-testid="add-employee-menu-item"
+                >
+                  <PersonAddIcon sx={{ mr: 1 }} />
+                  Add Employee
+                </MenuItem>
+                <MenuItem 
+                  component={Link} 
+                  to="/list" 
+                  onClick={handleEmployeeMenuClose}
+                  data-testid="employee-list-menu-item"
+                >
+                  <ListIcon sx={{ mr: 1 }} />
+                  Employee List
+                </MenuItem>
+              </Menu>
               <Button color="inherit" onClick={handleLogoff}>Logoff</Button>
             </>
           ) : (
             <Button color="inherit" component={Link} to="/login">Login</Button>
           )}
-          <FormControl size="small" sx={{ minWidth: 120 }}>
-            <InputLabel 
-              id="theme-select-label" 
-              sx={{ 
-                color: 'inherit',
-                '&.Mui-focused': { color: 'inherit' }
-              }}
-            >
-              <Box sx={{ display: 'flex', alignItems: 'center', gap: 0.5 }}>
-                <PaletteIcon fontSize="small" />
-                Theme
-              </Box>
-            </InputLabel>
-            <Select
-              labelId="theme-select-label"
-              value={currentTheme}
-              onChange={handleThemeChange}
-              label="Theme"
-              sx={{
-                color: 'inherit',
-                '& .MuiOutlinedInput-notchedOutline': {
-                  borderColor: 'rgba(255, 255, 255, 0.23)',
-                },
-                '&:hover .MuiOutlinedInput-notchedOutline': {
-                  borderColor: 'rgba(255, 255, 255, 0.5)',
-                },
-                '&.Mui-focused .MuiOutlinedInput-notchedOutline': {
-                  borderColor: 'rgba(255, 255, 255, 0.87)',
-                },
-                '& .MuiSvgIcon-root': {
-                  color: 'inherit',
-                },
-              }}
-            >
-              {themeKeys.map((themeKey) => (
-                <MenuItem key={themeKey} value={themeKey}>
-                  {themeNames[themeKey]}
-                </MenuItem>
-              ))}
-            </Select>
-          </FormControl>
+          <Button 
+            color="inherit" 
+            onClick={handleThemeMenuOpen}
+            onMouseEnter={handleThemeMenuOpen}
+            data-testid="theme-menu-button"
+            sx={{ 
+              '&:hover': { 
+                backgroundColor: 'rgba(255, 255, 255, 0.1)' 
+              } 
+            }}
+            startIcon={<PaletteIcon />}
+            endIcon={<ExpandMoreIcon />}
+          >
+            {themeNames[currentTheme]}
+          </Button>
+          <Menu
+            anchorEl={themeMenuAnchor}
+            open={Boolean(themeMenuAnchor)}
+            onClose={handleThemeMenuClose}
+            MenuListProps={{
+              onMouseLeave: handleThemeMenuClose,
+            }}
+            data-testid="theme-menu"
+            sx={{
+              '& .MuiPaper-root': {
+                mt: 1.5,
+              }
+            }}
+          >
+            {themeKeys.map((themeKey) => (
+              <MenuItem 
+                key={themeKey} 
+                onClick={() => handleThemeChange(themeKey)}
+                data-testid={`theme-${themeKey}-menu-item`}
+                sx={{
+                  backgroundColor: currentTheme === themeKey ? 'rgba(0, 0, 0, 0.08)' : 'transparent',
+                  '&:hover': {
+                    backgroundColor: currentTheme === themeKey ? 'rgba(0, 0, 0, 0.12)' : 'rgba(0, 0, 0, 0.04)',
+                  }
+                }}
+              >
+                <PaletteIcon sx={{ mr: 1 }} />
+                {themeNames[themeKey]}
+              </MenuItem>
+            ))}
+          </Menu>
         </Box>
       </Toolbar>
     </AppBar>
