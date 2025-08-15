@@ -14,6 +14,8 @@ import VisibilityOff from '@mui/icons-material/VisibilityOff';
 import IconButton from '@mui/material/IconButton';
 import InputAdornment from '@mui/material/InputAdornment';
 import Alert from '@mui/material/Alert';
+import Collapse from '@mui/material/Collapse';
+import ErrorOutlineIcon from '@mui/icons-material/ErrorOutline';
 import CircularProgress from '@mui/material/CircularProgress';
 
 const Login = () => {
@@ -100,7 +102,10 @@ const Login = () => {
             <TextField
               label="Username"
               value={username}
-              onChange={e => setUsername(e.target.value)}
+              onChange={e => {
+                setUsername(e.target.value);
+                if (error) setError(''); // Clear error when user starts typing
+              }}
               fullWidth
               margin="normal"
               required
@@ -116,7 +121,10 @@ const Login = () => {
               label="Password"
               type={showPassword ? 'text' : 'password'}
               value={password}
-              onChange={e => setPassword(e.target.value)}
+              onChange={e => {
+                setPassword(e.target.value);
+                if (error) setError(''); // Clear error when user starts typing
+              }}
               fullWidth
               margin="normal"
               required
@@ -144,15 +152,53 @@ const Login = () => {
               }}
             />
             
-            {error && (
+            <Collapse in={!!error} timeout={400}>
               <Alert 
-                severity="error" 
-                sx={{ mt: 2, borderRadius: 2 }}
+                severity="error"
+                icon={<ErrorOutlineIcon sx={{ fontSize: '1.2rem' }} />}
+                sx={{ 
+                  mt: 2, 
+                  borderRadius: 3,
+                  background: 'linear-gradient(135deg, #ffebee 0%, #fce4ec 100%)',
+                  border: '1px solid #f8bbd9',
+                  boxShadow: '0 4px 12px rgba(244, 67, 54, 0.15)',
+                  '& .MuiAlert-icon': {
+                    color: '#d32f2f',
+                    fontSize: '1.2rem'
+                  },
+                  '& .MuiAlert-message': {
+                    fontSize: '0.95rem',
+                    fontWeight: 500,
+                    color: '#c62828',
+                    lineHeight: 1.5
+                  },
+                  '&:hover': {
+                    boxShadow: '0 6px 20px rgba(244, 67, 54, 0.2)',
+                    transform: 'translateY(-1px)',
+                    transition: 'all 0.3s ease'
+                  },
+                  transition: 'all 0.3s ease'
+                }}
                 data-testid="error-alert"
               >
-                {error}
+                <Box>
+                  <Typography sx={{ 
+                    fontSize: '1rem', 
+                    fontWeight: 600, 
+                    mb: 0.5,
+                    color: '#c62828'
+                  }}>
+                    Authentication Failed
+                  </Typography>
+                  <Typography sx={{ fontSize: '0.9rem', color: '#c62828' }}>
+                    {error === 'Invalid username or password' 
+                      ? 'Invalid username or password. Please check your credentials and try again.'
+                      : error
+                    }
+                  </Typography>
+                </Box>
               </Alert>
-            )}
+            </Collapse>
             
             <Button 
               type="submit" 
