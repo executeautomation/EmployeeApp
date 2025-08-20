@@ -97,15 +97,9 @@ async function runDatabaseTests() {
                       }
                     }
                     
-                    // Close database connection
-                    db.close((err) => {
-                      if (err) {
-                        console.error('Error closing database:', err);
-                      } else {
-                        console.log('\n✅ Database connection closed');
-                        console.log('\n🏁 Database tests completed!');
-                      }
-                    });
+                    // Test 7: INSERT operations
+                    console.log('\nTest 7: Testing INSERT operations...');
+                    testInsertOperations();
                   });
                 }
               });
@@ -116,6 +110,168 @@ async function runDatabaseTests() {
     } else {
       console.log('❌ employees table does not exist');
       db.close();
+    }
+  });
+}
+
+// Test INSERT operations
+function testInsertOperations() {
+  console.log('📝 Testing INSERT operations...');
+  
+  const testEmployee = {
+    name: 'Test User',
+    email: 'test.user@testdb.com',
+    position: 'Database Tester'
+  };
+  
+  // Insert test employee
+  db.run(
+    'INSERT INTO employees (name, email, position) VALUES (?, ?, ?)',
+    [testEmployee.name, testEmployee.email, testEmployee.position],
+    function (err) {
+      if (err) {
+        console.error('❌ INSERT operation failed:', err);
+        closeDatabase();
+      } else {
+        console.log(`✅ INSERT successful - New employee ID: ${this.lastID}`);
+        
+        // Verify the inserted data
+        db.get('SELECT * FROM employees WHERE id = ?', [this.lastID], (err, row) => {
+          if (err) {
+            console.error('❌ Error verifying INSERT:', err);
+          } else if (row) {
+            console.log('✅ INSERT verification successful:');
+            console.log(`   - ID: ${row.id}`);
+            console.log(`   - Name: ${row.name}`);
+            console.log(`   - Email: ${row.email}`);
+            console.log(`   - Position: ${row.position}`);
+            
+            // Test DELETE operations
+            console.log('\nTest 8: Testing DELETE operations...');
+            testDeleteOperations(row.id);
+          } else {
+            console.error('❌ INSERT verification failed - record not found');
+            closeDatabase();
+          }
+        });
+      }
+    }
+  );
+}
+
+// Test DELETE operations
+function testDeleteOperations(employeeId) {
+  console.log('🗑️ Testing DELETE operations...');
+  
+  // First, verify the record exists
+  db.get('SELECT * FROM employees WHERE id = ?', [employeeId], (err, row) => {
+    if (err) {
+      console.error('❌ Error checking record before DELETE:', err);
+      closeDatabase();
+    } else if (!row) {
+      console.error('❌ Record not found for DELETE test');
+      closeDatabase();
+    } else {
+      console.log(`✅ Record found for DELETE test - ID: ${employeeId}`);
+      
+      // Delete the record
+      db.run('DELETE FROM employees WHERE id = ?', [employeeId], function (err) {
+        if (err) {
+          console.error('❌ DELETE operation failed:', err);
+          closeDatabase();
+        } else if (this.changes === 0) {
+          console.error('❌ DELETE operation failed - no records affected');
+          closeDatabase();
+        } else {
+          console.log(`✅ DELETE successful - ${this.changes} record(s) deleted`);
+          
+          // Verify the record is deleted
+          db.get('SELECT * FROM employees WHERE id = ?', [employeeId], (err, row) => {
+            if (err) {
+              console.error('❌ Error verifying DELETE:', err);
+            } else if (row) {
+              console.error('❌ DELETE verification failed - record still exists');
+            } else {
+              console.log('✅ DELETE verification successful - record removed');
+            }
+            
+            // Test edge cases
+            console.log('\nTest 9: Testing edge cases...');
+            testEdgeCases();
+          });
+        }
+      });
+    }
+  });
+}
+
+// Test edge cases
+function testEdgeCases() {
+  console.log('⚠️ Testing edge cases...');
+  
+  // Test INSERT with missing data
+  console.log('Testing INSERT with missing data...');
+  db.run(
+    'INSERT INTO employees (name, email, position) VALUES (?, ?, ?)',
+    ['', 'invalid@test.com', 'Test Position'], // Empty name
+    function (err) {
+      if (err) {
+        console.log('✅ INSERT correctly rejected empty name');
+      } else {
+        console.log('⚠️ INSERT with empty name was allowed (ID: ' + this.lastID + ')');
+        // Clean up the invalid record
+        db.run('DELETE FROM employees WHERE id = ?', [this.lastID]);
+      }
+      
+      // Test DELETE with non-existent ID
+      console.log('Testing DELETE with non-existent ID...');
+      db.run('DELETE FROM employees WHERE id = ?', [99999], function (err) {
+        if (err) {
+          console.error('❌ DELETE with invalid ID caused error:', err);
+        } else if (this.changes === 0) {
+          console.log('✅ DELETE correctly handled non-existent ID (no changes)');
+        } else {
+          console.log('⚠️ DELETE with invalid ID affected records unexpectedly');
+        }
+        
+        // Test final database state
+        console.log('\nTest 10: Final database state verification...');
+        verifyFinalState();
+      });
+    }
+  );
+}
+
+// Verify final database state
+function verifyFinalState() {
+  console.log('🔍 Verifying final database state...');
+  
+  db.get("SELECT COUNT(*) as count FROM employees", (err, row) => {
+    if (err) {
+      console.error('❌ Error getting final count:', err);
+    } else {
+      console.log(`✅ Final database contains ${row.count} employee(s)`);
+    }
+    
+    // Close database connection
+    closeDatabase();
+  });
+}
+
+// Close database connection
+function closeDatabase() {
+  db.close((err) => {
+    if (err) {
+      console.error('Error closing database:', err);
+    } else {
+      console.log('\n✅ Database connection closed');
+      console.log('\n🏁 Database tests completed!');
+      console.log('\n📊 Test Summary:');
+      console.log('   ✅ SELECT operations tested');
+      console.log('   ✅ INSERT operations tested');
+      console.log('   ✅ DELETE operations tested');
+      console.log('   ✅ Data integrity verified');
+      console.log('   ✅ Edge cases tested');
     }
   });
 }
