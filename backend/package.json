@@ -3,7 +3,12 @@
   "version": "1.0.0",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "node run-all-db-tests.js",
+    "test:mcp": "node test-mcp-server.js",
+    "test:db": "node test-db.js",
+    "test:api": "node test-api-endpoints.js",
+    "add-sample-data": "node add-sample-data.js",
+    "start": "node server.js"
   },
   "keywords": [],
   "author": "",
